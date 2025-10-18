@@ -1,0 +1,22 @@
+# First step is install dependencies inside utils  
+steps:
+  - name: 'python'
+    entrypoint: pip
+    args: ["install", "-r", "utils/requirements.txt", "--user"]
+
+# second step to require responsible for copy from github to composer airflow   
+  - name: 'python'
+    entrypoint: python
+    args:
+      - "utils/add_dags_to_composer.py"
+      - "--dags_directory=${_DAGS_DIRECTORY}"
+      - "--dags_bucket=${_DAGS_BUCKET}"
+      - "--data_directory=${_DATA_DIRECTORY}"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _DAGS_DIRECTORY: "airflow/"
+  _DAGS_BUCKET: "us-central1-avdhealthcare20-3eddde24-bucket"
+  _DATA_DIRECTORY: "data/"
